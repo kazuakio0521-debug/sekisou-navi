@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEKISOU NAVI PRO v3.7 [ALL-MATERIALS]</title>
+    <title>SEKISOU NAVI PRO v3.7</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00f2fe; --warning: #ffcf00; --danger: #ff4d4d; --bg: #0a0e17; --card-bg: rgba(20, 30, 48, 0.8); --text: #e0f7fa; --input-bg: rgba(0, 0, 0, 0.3); --border: #1a2a44; }
@@ -28,13 +28,11 @@
     </style>
 </head>
 <body>
-
 <div class="card">
     <h1>CRACK ANALYSIS MASTER</h1>
     <div class="section-title">Material Database</div>
     <select id="materialSelect" onchange="loadMaterial()"></select>
     <div id="newNameArea" style="display:none;"><input type="text" id="newName" placeholder="New Material Name"></div>
-
     <div class="section-title">Chemical Composition (%)</div>
     <div class="grid">
         <div><label>C</label><input type="number" id="C" step="0.01"></div>
@@ -45,10 +43,8 @@
         <div><label>Ni</label><input type="number" id="Ni" step="0.01"></div>
     </div>
     <div style="margin-top:10px;"><label>V (Vanadium)</label><input type="number" id="V" step="0.01" value="0"></div>
-    
     <button class="btn-calc" onclick="calculate()">Analyze Crack Risk</button>
     <button class="btn-save" onclick="saveMaterial()">Save New Material</button>
-
     <div id="result" class="result-box">
         <div style="text-align: center; font-family: 'Orbitron'; font-size:0.9rem;" id="riskLevel">RISK LEVEL</div>
         <div class="gauge-container"><div id="gauge" class="gauge-bar"></div></div>
@@ -62,7 +58,6 @@
         </div>
     </div>
 </div>
-
 <script>
     const defaultData = {
         skd11: { name: "SKD11", c: 1.5, cr: 12.0, mn: 0.4, mo: 1.0, si: 0.3, ni: 0, v: 0.3 },
@@ -78,9 +73,7 @@
         scm440: { name: "SCM440", c: 0.4, cr: 1.0, mn: 0.7, mo: 0.2, si: 0.2, ni: 0, v: 0 },
         s45c: { name: "S45C", c: 0.45, cr: 0, mn: 0.6, mo: 0, si: 0.2, ni: 0, v: 0 }
     };
-
     let materials = JSON.parse(localStorage.getItem('myMaterials')) || defaultData;
-
     function init() {
         const select = document.getElementById('materialSelect');
         select.innerHTML = '';
@@ -96,7 +89,6 @@
         select.appendChild(optNew);
         loadMaterial();
     }
-
     function loadMaterial() {
         const sel = document.getElementById('materialSelect').value;
         if (sel === 'new') {
@@ -108,28 +100,6 @@
             ['C','Cr','Mn','Mo','Si','Ni','V'].forEach(id => document.getElementById(id).value = data[id.toLowerCase()] || 0);
         }
     }
-
-    function saveMaterial() {
-        const sel = document.getElementById('materialSelect').value;
-        let name = (sel === 'new') ? document.getElementById('newName').value : prompt("材料名を保存:", materials[sel].name);
-        if (!name) return;
-        const key = 'user_' + Date.now();
-        materials[key] = {
-            name: name,
-            c: parseFloat(document.getElementById('C').value) || 0,
-            cr: parseFloat(document.getElementById('Cr').value) || 0,
-            mn: parseFloat(document.getElementById('Mn').value) || 0,
-            mo: parseFloat(document.getElementById('Mo').value) || 0,
-            si: parseFloat(document.getElementById('Si').value) || 0,
-            ni: parseFloat(document.getElementById('Ni').value) || 0,
-            v: parseFloat(document.getElementById('V').value) || 0
-        };
-        localStorage.setItem('myMaterials', JSON.stringify(materials));
-        init();
-        document.getElementById('materialSelect').value = key;
-        alert("材料データを保存しました。");
-    }
-
     function calculate() {
         const c = parseFloat(document.getElementById('C').value) || 0;
         const cr = parseFloat(document.getElementById('Cr').value) || 0;
@@ -138,24 +108,16 @@
         const si = parseFloat(document.getElementById('Si').value) || 0;
         const ni = parseFloat(document.getElementById('Ni').value) || 0;
         const v = parseFloat(document.getElementById('V').value) || 0;
-
         let ceq, ms, risk, color, advice, score;
-
-        // 【判定】オーステナイト判定
         if ((ni >= 7 && cr >= 15) || ni > 30) {
-            risk = "STABLE (Austenite/Ni)";
-            color = "#00f2fe";
-            score = 10;
-            ceq = c + (mn/20) + (si/50) + (cr/40) + (mo/50); 
-            ms = -150; 
-            advice = "オーステナイト組織のため硬化割れリスクは低いです。積層現場での経験通り、予熱なしでも安全に施工可能です。";
+            risk = "STABLE (Austenite/Ni)"; color = "#00f2fe"; score = 10;
+            ceq = c + (mn/20) + (si/50) + (cr/40) + (mo/50); ms = -150;
+            advice = "オーステナイト組織のため硬化割れリスクは低いです。予熱なしで安全に施工可能です。";
         } else {
             ceq = c + (mn/6) + (si/24) + (cr/5) + (mo/4) + (v/14);
             ms = 539 - (423 * c) - (30.4 * mn) - (12.1 * cr) - (17.7 * ni) - (7.5 * mo);
-            
-            if (cr > 10) ms = 540 - (450 * c) - (15 * cr); 
-            if (ms < 50) ms = 165 + (c * 20); 
-
+            if (cr > 10) ms = 540 - (450 * c) - (15 * cr);
+            if (ms < 50) ms = 165 + (c * 20);
             score = Math.min(ceq * 40, 100);
             if (ceq > 0.8 || c > 0.4) {
                 risk = "CRITICAL DANGER"; color = "#ff4d4d";
@@ -168,7 +130,6 @@
                 advice = "標準的な施工条件で安全に積層可能です。";
             }
         }
-
         document.getElementById('result').style.display = 'block';
         document.getElementById('riskLevel').innerText = "RISK: " + risk;
         document.getElementById('riskLevel').style.color = color;
@@ -177,8 +138,6 @@
         document.getElementById('ceqVal').innerText = ceq.toFixed(2);
         document.getElementById('msPoint').innerText = (ms < 0) ? "常温以下" : ms.toFixed(0) + "℃";
         document.getElementById('mainAdvice').innerText = advice;
-        
-        setTimeout(() => { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }, 100);
     }
     init();
 </script>

@@ -3,92 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEKISOU NAVI - Pro Edition</title>
+    <title>SEKISOU NAVI PRO v2.1 [CYBER-TACTICAL]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #f97316;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-            --lv1: #22c55e; --lv2: #eab308; --lv3: #f97316; --lv4: #ef4444; --lv5: #a855f7;
+        :root { 
+            --primary: #00f2fe; 
+            --primary-dark: #00a8b5;
+            --bg: #0a0e17; 
+            --card-bg: rgba(20, 30, 48, 0.8); 
+            --text: #e0f7fa; 
+            --input-bg: rgba(0, 0, 0, 0.3); 
+            --border: #1a2a44; 
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-dark); color: var(--text-main); padding: 15px; display: flex; justify-content: center; }
-        .card { max-width: 480px; width: 100%; background: var(--card-bg); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); }
-        h1 { color: var(--accent); text-align: center; font-size: 1.5rem; letter-spacing: 3px; text-shadow: 0 0 15px rgba(249, 115, 22, 0.5); margin-bottom: 20px; }
-        
-        .section-label { color: var(--accent); font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; display: block; opacity: 0.8; }
-        select, input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: white; margin-bottom: 12px; box-sizing: border-box; }
-        
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .input-group label { display: block; font-size: 0.8rem; color: var(--text-sub); margin-bottom: 4px; }
-        
-        button { width: 100%; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
-        .btn-calc { background: linear-gradient(135deg, #fb923c, #f97316); color: white; margin-top: 15px; font-size: 1rem; }
-        .btn-save { background: transparent; border: 1px solid #334155; color: var(--text-sub); font-size: 0.8rem; margin-top: 10px; }
-        .btn-delete { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; font-size: 0.75rem; padding: 8px; margin-bottom: 15px; display: none; }
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background: var(--bg); 
+            background-image: radial-gradient(#1a2a44 1px, transparent 1px); 
+            background-size: 20px 20px;
+            color: var(--text); 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            margin: 0; 
+            min-height: 100vh;
+        }
 
-        .result-box { margin-top: 25px; border-radius: 15px; overflow: hidden; display: none; border: 1px solid #334155; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .level-header { padding: 12px; text-align: center; font-weight: 900; font-size: 1.3rem; letter-spacing: 1px; }
-        .advice-body { padding: 18px; background: rgba(0,0,0,0.3); }
-        
-        .ceq-info { text-align: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .ceq-val { font-size: 2.2rem; font-weight: 800; color: var(--text-main); }
+        .card { 
+            max-width: 480px; 
+            width: 100%; 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.15); 
+            border: 1px solid var(--border); 
+            backdrop-filter: blur(10px); 
+        }
 
-        .item { margin-bottom: 12px; }
-        .item-t { font-size: 0.7rem; color: var(--accent); font-weight: bold; margin-bottom: 2px; }
-        .item-v { font-size: 0.9rem; line-height: 1.4; color: #e2e8f0; }
+        h1 { 
+            font-family: 'Orbitron', sans-serif; 
+            color: var(--primary); 
+            text-align: center; 
+            font-size: 1.8rem; 
+            letter-spacing: 3px; 
+            text-shadow: 0 0 15px rgba(0, 242, 254, 0.6); 
+            margin-top: 0; 
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title { 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem; 
+            color: var(--primary); 
+            font-weight: bold; 
+            margin-bottom: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            margin-right: 10px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #88a0b0; text-transform: uppercase; }
+        
+        select, input { 
+            width: 100%; 
+            padding: 15px; 
+            background: var(--input-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 6px; 
+            color: var(--primary); 
+            font-size: 1.1rem; 
+            margin-bottom: 20px; 
+            outline: none; 
+            transition: 0.3s;
+            box-sizing: border-box; 
+        }
+        select:focus, input:focus { 
+            border-color: var(--primary); 
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 10px; }
+        
+        button { 
+            font-family: 'Orbitron', sans-serif;
+            width: 100%; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-size: 1.1rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+        }
+        
+        .btn-calc { 
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+            color: #0a0e17; 
+            margin-top: 20px; 
+            box-shadow: 0 5px 20px rgba(0, 242, 254, 0.4); 
+        }
+        .btn-calc:hover { box-shadow: 0 5px 30px rgba(0, 242, 254, 0.6); }
+        .btn-calc:active { transform: scale(0.98); }
+        
+        .btn-save { 
+            background: transparent; 
+            color: #668090; 
+            border: 1px solid #334a60; 
+            margin-top: 15px; 
+            font-size: 0.85rem; 
+        }
+        .btn-save:hover { border-color: #557088; color: var(--text); background: rgba(255,255,255,0.05); }
+
+        .result-box { 
+            margin-top: 30px; 
+            padding: 25px; 
+            border-radius: 8px; 
+            background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary); 
+            display: none; 
+            animation: fadeIn 0.5s ease-out; 
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .res-header { text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .res-lv { font-family: 'Orbitron', sans-serif; font-size: 1rem; margin-bottom: 8px; font-weight: bold; }
+        .res-val { font-family: 'Orbitron', sans-serif; font-size: 2.8rem; font-weight: bold; line-height: 1; }
+        
+        .advice-item { margin-top: 18px; }
+        .advice-title { font-size: 0.9rem; margin-bottom: 8px; display: flex; align-items: center; color: #88a0b0; }
+        .advice-icon { color: var(--primary); margin-right: 10px; font-size: 1.1rem; }
+        .advice-text { font-size: 1rem; color: var(--text); line-height: 1.5; font-weight: 300; padding-left: 26px; }
+
+        @media (max-width: 400px) {
+            .card { padding: 20px; }
+            h1 { font-size: 1.4rem; }
+            .grid { gap: 10px; }
+            .res-val { font-size: 2.2rem; }
+        }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>SEKISOU NAVI</h1>
+    <h1>SEKISOU NAVI PRO</h1>
     
-    <span class="section-label">Material Database</span>
-    <select id="materialSelect" onchange="loadMaterial()"></select>
-    <button id="delBtn" class="btn-delete" onclick="deleteMaterial()">✕ DELETE THIS MATERIAL</button>
-
+    <div class="section-title">Material Database</div>
+    <select id="materialSelect" onchange="loadMaterial()">
+    </select>
     <div id="newNameArea" style="display:none;">
-        <input type="text" id="newName" placeholder="Enter new material name...">
+        <label>New Material Name</label>
+        <input type="text" id="newName" placeholder="e.g. SPM30, SUS420">
     </div>
 
-    <span class="section-label">Mill Test Report (%)</span>
+    <div class="section-title">Mill Test Report (%)</div>
     <div class="grid">
-        <div class="input-group"><label>C (炭素)</label><input type="number" id="C" step="0.01"></div>
-        <div class="input-group"><label>Cr (クロム)</label><input type="number" id="Cr" step="0.01"></div>
-        <div class="input-group"><label>Mn (マンガン)</label><input type="number" id="Mn" step="0.01"></div>
-        <div class="input-group"><label>Mo (モリブデン)</label><input type="number" id="Mo" step="0.01"></div>
-        <div class="input-group"><label>Si (ケイ素)</label><input type="number" id="Si" step="0.01"></div>
-        <div class="input-group"><label>V (バナジウム)</label><input type="number" id="V" step="0.01"></div>
+        <div class="input-group"><label>C (炭素)</label><input type="number" id="C" step="0.01" placeholder="0.00"></div>
+        <div class="input-group"><label>Cr (クロム)</label><input type="number" id="Cr" step="0.01" placeholder="0.00"></div>
+        <div class="input-group"><label>Mn (マンガン)</label><input type="number" id="Mn" step="0.01" placeholder="0.00"></div>
+        <div class="input-group"><label>Mo (モリブデン)</label><input type="number" id="Mo" step="0.01" placeholder="0.00"></div>
+        <div class="input-group"><label>Si (ケイ素)</label><input type="number" id="Si" step="0.01" placeholder="0.00"></div>
+        <div class="input-group"><label>V (バナジウム)</label><input type="number" id="V" step="0.01" placeholder="0.00"></div>
     </div>
     
-    <button class="btn-save" onclick="saveMaterial()">SAVE TO DATABASE</button>
-    <button class="btn-calc" onclick="calculate()">ANALYSIS START</button>
+    <button class="btn-calc" onclick="calculate()">Analysis Start</button>
+    <button class="btn-save" onclick="saveMaterial()">Save to Database</button>
 
     <div id="result" class="result-box">
-        <div id="lvHeader" class="level-header">LEVEL --</div>
-        <div class="advice-body">
-            <div class="ceq-info">
-                <div style="font-size: 0.75rem; color: var(--text-sub);">Carbon Equivalent (Ceq)</div>
-                <div id="ceqVal" class="ceq-val">0.00</div>
-            </div>
-            <div class="item"><div class="item-t">🌡️ PREHEAT (予熱)</div><div id="pre" class="item-v"></div></div>
-            <div class="item"><div class="item-t">🔥 POST-HEAT (後熱)</div><div id="post" class="item-v"></div></div>
-            <div class="item"><div class="item-t">❄️ COOLING (冷却速度 / 炉冷)</div><div id="cool" class="item-v"></div></div>
+        <div class="res-header">
+            <div id="resLv" class="res-lv">LEVEL --</div>
+            <div id="ceqVal" class="res-val">0.00</div>
+            <div style="font-size: 0.75rem; color: #668090; margin-top:8px; letter-spacing: 1px;">Carbon Equivalent (Ceq)</div>
+        </div>
+        
+        <div class="advice-item">
+            <div class="advice-title"><span class="advice-icon">🌡️</span> 予熱温度 (Preheat)</div>
+            <div id="preheat" class="advice-text">---</div>
+        </div>
+        <div class="advice-item">
+            <div class="advice-title"><span class="advice-icon">🔥</span> 後熱・保持 (Post-heat)</div>
+            <div id="postheat" class="advice-text">---</div>
+        </div>
+        <div class="advice-item">
+            <div class="advice-title"><span class="advice-icon">❄️</span> 冷却速度 (Cooling Rate)</div>
+            <div id="coolspeed" class="advice-text">---</div>
         </div>
     </div>
 </div>
 
 <script>
-    // ... JavaScript の中身はタイトル以外同じだけど、最新版として統一 ...
     const defaultData = {
         skd11: { name: "SKD11 (Standard)", c: 1.5, cr: 12.0, mn: 0.4, mo: 1.0, si: 0.3, v: 0.3 },
         skd61: { name: "SKD61 (Standard)", c: 0.4, cr: 5.0, mn: 0.4, mo: 1.2, si: 1.0, v: 1.0 }
     };
+
     let materials = JSON.parse(localStorage.getItem('myMaterials')) || defaultData;
 
     function init() {
@@ -96,11 +224,13 @@
         select.innerHTML = '';
         for (let key in materials) {
             let opt = document.createElement('option');
-            opt.value = key; opt.innerText = materials[key].name;
+            opt.value = key;
+            opt.innerText = materials[key].name;
             select.appendChild(opt);
         }
         let optNew = document.createElement('option');
-        optNew.value = 'new'; optNew.innerText = '＋ Create New Material';
+        optNew.value = 'new';
+        optNew.innerText = '＋ Create New / Add';
         select.appendChild(optNew);
         loadMaterial();
     }
@@ -108,80 +238,124 @@
     function loadMaterial() {
         const sel = document.getElementById('materialSelect').value;
         const area = document.getElementById('newNameArea');
-        const delBtn = document.getElementById('delBtn');
         if (sel === 'new') {
-            area.style.display = 'block'; delBtn.style.display = 'none';
+            area.style.display = 'block';
             ['C','Cr','Mn','Mo','Si','V'].forEach(id => document.getElementById(id).value = '');
         } else {
             area.style.display = 'none';
-            delBtn.style.display = sel.startsWith('user_') ? 'block' : 'none';
-            const d = materials[sel];
-            document.getElementById('C').value = d.c; document.getElementById('Cr').value = d.cr;
-            document.getElementById('Mn').value = d.mn; document.getElementById('Mo').value = d.mo;
-            document.getElementById('Si').value = d.si; document.getElementById('V').value = d.v;
+            const data = materials[sel];
+            document.getElementById('C').value = data.c;
+            document.getElementById('Cr').value = data.cr;
+            document.getElementById('Mn').value = data.mn;
+            document.getElementById('Mo').value = data.mo;
+            document.getElementById('Si').value = data.si;
+            document.getElementById('V').value = data.v;
         }
     }
 
     function saveMaterial() {
         const sel = document.getElementById('materialSelect').value;
-        let name, key;
+        let name;
         if (sel === 'new') {
-            name = document.getElementById('newName').value || prompt("材質名を入力してください");
-            if (!name) return; key = 'user_' + Date.now();
+            name = document.getElementById('newName').value;
         } else {
-            name = materials[sel].name; key = sel;
-            if(!confirm(name + " を更新してもよろしいですか？")) return;
+            name = prompt("名前を変更して保存しますか？", materials[sel].name);
         }
+        
+        if (!name) { alert("名称を入力してください。"); return; }
+        
+        const key = 'user_' + Date.now();
         materials[key] = {
             name: name,
-            c: parseFloat(document.getElementById('C').value)||0, cr: parseFloat(document.getElementById('Cr').value)||0,
-            mn: parseFloat(document.getElementById('Mn').value)||0, mo: parseFloat(document.getElementById('Mo').value)||0,
-            si: parseFloat(document.getElementById('Si').value)||0, v: parseFloat(document.getElementById('V').value)||0
+            c: parseFloat(document.getElementById('C').value) || 0,
+            cr: parseFloat(document.getElementById('Cr').value) || 0,
+            mn: parseFloat(document.getElementById('Mn').value) || 0,
+            mo: parseFloat(document.getElementById('Mo').value) || 0,
+            si: parseFloat(document.getElementById('Si').value) || 0,
+            v: parseFloat(document.getElementById('V').value) || 0
         };
         localStorage.setItem('myMaterials', JSON.stringify(materials));
-        init(); document.getElementById('materialSelect').value = key; loadMaterial(); alert("データベースを更新しました。");
-    }
-
-    function deleteMaterial() {
-        const sel = document.getElementById('materialSelect').value;
-        if (confirm("この材質データを完全に削除しますか？")) {
-            delete materials[sel]; localStorage.setItem('myMaterials', JSON.stringify(materials)); init();
-        }
+        init();
+        document.getElementById('materialSelect').value = key;
+        alert("データベースに保存されました。");
     }
 
     function calculate() {
-        const c = parseFloat(document.getElementById('C').value)||0, cr = parseFloat(document.getElementById('Cr').value)||0,
-              mn = parseFloat(document.getElementById('Mn').value)||0, mo = parseFloat(document.getElementById('Mo').value)||0,
-              si = parseFloat(document.getElementById('Si').value)||0, v = parseFloat(document.getElementById('V').value)||0;
+        const c = parseFloat(document.getElementById('C').value) || 0;
+        const cr = parseFloat(document.getElementById('Cr').value) || 0;
+        const mn = parseFloat(document.getElementById('Mn').value) || 0;
+        const mo = parseFloat(document.getElementById('Mo').value) || 0;
+        const si = parseFloat(document.getElementById('Si').value) || 0;
+        const v = parseFloat(document.getElementById('V').value) || 0;
 
         const ceq = c + (mn/6) + (si/24) + (cr/5) + (mo/4) + (v/14);
-        document.getElementById('ceqVal').innerText = ceq.toFixed(2);
         
-        let lv, color, pre, post, cool;
-        if (ceq >= 1.2) {
-            lv = "LEVEL 5 (CRITICAL)"; color = "var(--lv5)";
-            pre = "250℃以上 (予熱必須)"; post = "250℃/1時間保持。絶対に急冷厳禁。"; cool = "炉冷必須。5℃/10分以下のペースで。";
-        } else if (ceq >= 0.8) {
-            lv = "LEVEL 4 (DANGER)"; color = "var(--lv4)";
-            pre = "200℃ - 250℃"; post = "200℃/30分保持後、徐冷開始。"; cool = "10℃/10分以下の徐冷を維持。";
-        } else if (ceq >= 0.6) {
-            lv = "LEVEL 3 (WARNING)"; color = "var(--lv3)";
-            pre = "150℃ - 200℃"; post = "積層直後に保温カバー等で保護。"; cool = "20℃/10分程度のペースで。";
-        } else if (ceq >= 0.4) {
-            lv = "LEVEL 2 (CAUTION)"; color = "var(--lv2)";
-            pre = "100℃前後"; post = "放冷前に少し熱を残すイメージ。"; cool = "扇風機等は使わず自然に。";
+        let pre, post, cool, lv, color;
+
+        if (ceq <= 0.30) {
+            lv = "LEVEL 1"; color = "#2ecc71";
+            pre = "常温でOK。結露がある場合のみ50℃程度に。";
+            post = "不要。"; cool = "放冷（放置）で大丈夫。";
+        } else if (ceq <= 0.45) {
+            lv = "LEVEL 2"; color = "#82e0aa";
+            pre = "50℃〜100℃。手で触って熱いくらい。";
+            post = "不要。"; cool = "自然放冷でOK。";
+        } else if (ceq <= 0.60) {
+            lv = "LEVEL 3"; color = "#f1c40f";
+            pre = "100℃〜150℃。水分を完全に飛ばして。";
+            post = "積層後、空冷せず少し保温。"; cool = "風の当たらない場所でゆっくり冷やす。";
+        } else if (ceq <= 0.80) {
+            lv = "LEVEL 4"; color = "#f39c12";
+            pre = "150℃〜200℃。しっかり予熱して。";
+            post = "150℃で20分保持推奨。"; cool = "10分で20℃ダウンを目安に。";
+        } else if (ceq <= 1.20) {
+            lv = "LEVEL 5"; color = "#e67e22";
+            pre = "200℃〜250℃。温度計で管理して。";
+            post = "200℃で30分キープ。"; cool = "10分で15℃ダウン。バーナーで調整。";
+        } else if (ceq <= 2.00) {
+            lv = "LEVEL 6"; color = "#d35400";
+            pre = "250℃〜300℃。母材全体を熱して。";
+            post = "250℃で60分保持（除歪）"; cool = "10分で10℃ダウン。断熱材で包んで。";
+        } else if (ceq <= 3.00) {
+            lv = "LEVEL 7"; color = "#c0392b";
+            pre = "300℃〜350℃。熱管理が最優先。";
+            post = "300℃保持後、炉内でゆっくり冷ます。"; cool = "10分で8℃ダウン。極めて慎重に。";
+        } else if (ceq <= 4.00) {
+            lv = "LEVEL 8"; color = "#922b21";
+            pre = "350℃〜400℃。割れのリスクが非常に高い。";
+            post = "積層後、すぐに熱処理炉へ。"; cool = "10分で5℃ダウン。100℃まで監視。";
+        } else if (ceq <= 5.00) {
+            lv = "LEVEL 9"; color = "#641e16";
+            pre = "400℃以上。常にヒーターで加熱維持。";
+            post = "後熱だけでなく、完全な焼なましが必要。"; cool = "10分で3℃ダウン。徐々に火を絞る。";
         } else {
-            lv = "LEVEL 1 (SAFE)"; color = "var(--lv1)";
-            pre = "30℃〜常温"; post = "特になし"; cool = "自然放冷でOK";
+            lv = "LEVEL 10"; color = "#1b2631";
+            pre = "限界加熱。専門の設備が必要。";
+            post = "常温まで数時間かけて落とす。"; cool = "冷却制御プログラムに従うこと！";
         }
 
-        const head = document.getElementById('lvHeader');
-        head.innerText = lv; head.style.backgroundColor = color;
-        document.getElementById('pre').innerText = pre;
-        document.getElementById('post').innerText = post;
-        document.getElementById('cool').innerText = cool;
-        document.getElementById('result').style.display = 'block';
+        const resBox = document.getElementById('result');
+        resBox.style.display = 'block';
+        resBox.style.borderLeftColor = color;
+        resBox.style.boxShadow = `0 0 20px ${color}40`; 
+        
+        document.getElementById('resLv').innerText = lv;
+        document.getElementById('resLv').style.color = color;
+        document.getElementById('resLv').style.textShadow = `0 0 10px ${color}`;
+        
+        document.getElementById('ceqVal').innerText = ceq.toFixed(2);
+        document.getElementById('ceqVal').style.color = color;
+        document.getElementById('ceqVal').style.textShadow = `0 0 15px ${color}`;
+        
+        document.getElementById('preheat').innerText = pre;
+        document.getElementById('postheat').innerText = post;
+        document.getElementById('coolspeed').innerText = cool;
+        
+        setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }, 100);
     }
+
     init();
 </script>
 </body>

@@ -3,280 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEKISOU NAVI PRO v5</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<title>CRACK ANALYSIS MASTER v5.6</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
 <style>
-
-:root{
---primary:#00f2fe;
---danger:#ff4d4d;
---warn:#ffcf00;
---safe:#2ecc71;
---bg:#0a0e17;
---card:rgba(20,30,48,0.9);
---border:#1a2a44;
---text:#e0f7fa;
-}
-
-body{
-font-family:Arial;
-background:var(--bg);
-color:var(--text);
-padding:20px;
-display:flex;
-justify-content:center;
-}
-
-.card{
-max-width:520px;
-width:100%;
-background:var(--card);
-padding:25px;
-border-radius:10px;
-border:1px solid var(--border);
-}
-
-h1{
-text-align:center;
-color:var(--primary);
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-input,select{
-width:100%;
-padding:10px;
-background:black;
-border:1px solid var(--border);
-color:var(--primary);
-}
-
-button{
-width:100%;
-padding:15px;
-margin-top:10px;
-font-weight:bold;
-background:var(--primary);
-border:none;
-cursor:pointer;
-}
-
-.result{
-margin-top:20px;
-padding:15px;
-border:1px solid var(--border);
-}
-
-.stat{
-font-size:20px;
-font-weight:bold;
-}
-
-canvas{
-margin-top:20px;
-}
-
-/* smartphone */
-
-@media(max-width:600px){
-
-.grid{
-grid-template-columns:1fr;
-}
-
-}
-
+:root{ --primary:#00f2fe; --danger:#ff4d4d; --warn:#ffcf00; --safe:#2ecc71; --bg:#0a0e17; --card:rgba(20,30,48,0.9); --border:#1a2a44; --text:#e0f7fa; }
+body{ font-family:Arial; background:var(--bg); color:var(--text); padding:20px; display:flex; justify-content:center; }
+.card{ max-width:550px; width:100%; background:var(--card); padding:25px; border-radius:10px; border:1px solid var(--border); box-sizing: border-box; }
+h1{ text-align:center; color:var(--primary); font-size: 1.4rem; margin-bottom: 20px; border-bottom: 1px solid var(--primary); padding-bottom: 10px; }
+.grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom: 15px; }
+input,select{ width:100%; padding:12px; background:black; border:1px solid var(--border); color:var(--primary); box-sizing: border-box; font-size: 1rem; }
+label{ font-size: 0.85rem; color: #88a0b0; display: block; margin-bottom: 4px;}
+button{ width:100%; padding:18px; margin-top:15px; font-weight:bold; background:var(--primary); border:none; cursor:pointer; color: #0a0e17; border-radius: 5px; font-size: 1.1rem; }
+.result{ margin-top:20px; padding:15px; border:1px solid var(--border); background: rgba(0,0,0,0.5); border-radius: 5px; }
+.res-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px; }
+.stat{ font-size:20px; font-weight:bold; color: var(--primary); }
+#chartContainer{ margin-top:20px; height:280px !important; position: relative; }
 </style>
 </head>
-
 <body>
-
 <div class="card">
-
-<h1>CRACK ANALYSIS MASTER v5</h1>
-
-<select id="material">
-<option value="skd11">SKD11</option>
-<option value="dc53">DC53</option>
-<option value="skd61">SKD61</option>
-<option value="scm440">SCM440</option>
-<option value="s45c">S45C</option>
-<option value="sus304">SUS304</option>
-</select>
-
-<div class="grid">
-
-<div><label>C</label><input id="C" type="number"></div>
-<div><label>Cr</label><input id="Cr" type="number"></div>
-<div><label>Mn</label><input id="Mn" type="number"></div>
-<div><label>Mo</label><input id="Mo" type="number"></div>
-<div><label>Si</label><input id="Si" type="number"></div>
-<div><label>Ni</label><input id="Ni" type="number"></div>
-
-</div>
-
-<label>Heat Input (kJ/mm)</label>
-<input id="heat" value="5">
-
-<label>Base Metal</label>
-<input id="base" value="80">
-
-<label>Powder</label>
-<input id="powder" value="20">
-
-<button onclick="calculate()">Analyze</button>
-
-<div class="result">
-
-<div>Risk Level</div>
-<div class="stat" id="risk"></div>
-
-<div>Ceq</div>
-<div class="stat" id="ceq"></div>
-
-<div>Ms Point</div>
-<div class="stat" id="ms"></div>
-
-<div>Preheat Temp</div>
-<div class="stat" id="preheat"></div>
-
-<div>Cooling Rate</div>
-<div class="stat" id="cooling"></div>
-
-<div>Structure</div>
-<div class="stat" id="structure"></div>
-
-<div>Dilution</div>
-<div class="stat" id="dilution"></div>
-
-<canvas id="chart"></canvas>
-
-</div>
-
+    <h1>CRACK ANALYSIS MASTER v5.6</h1>
+    <label>Material Database</label>
+    <select id="material"></select>
+    <div class="grid" style="margin-top:15px;">
+        <div><label>C (炭素)</label><input id="C" type="number" step="0.01"></div>
+        <div><label>Cr (クロム)</label><input id="Cr" type="number" step="0.01"></div>
+        <div><label>Mn (マンガン)</label><input id="Mn" type="number" step="0.01"></div>
+        <div><label>Mo (モリブデン)</label><input id="Mo" type="number" step="0.01"></div>
+        <div><label>Si (シリコン)</label><input id="Si" type="number" step="0.01"></div>
+        <div><label>Ni (ニッケル)</label><input id="Ni" type="number" step="0.01"></div>
+    </div>
+    <div class="grid">
+        <div><label>V (バナジウム)</label><input id="V" type="number" step="0.01" value="0"></div>
+        <div></div>
+    </div>
+    <button onclick="calculate()">ANALYZE CRACK RISK</button>
+    <div class="result" id="resBox" style="display:none;">
+        <div class="res-item"><span>Risk Level</span><span class="stat" id="risk"></span></div>
+        <div class="res-item"><span>Ceq (炭素当量)</span><span class="stat" id="ceq"></span></div>
+        <div class="res-item"><span>Ms Point (変態点)</span><span class="stat" id="ms"></span></div>
+        <div class="res-item"><span>Preheat (推奨予熱)</span><span class="stat" id="preheat"></span></div>
+        <div id="chartContainer"><canvas id="chart"></canvas></div>
+    </div>
 </div>
 
 <script>
+const materialDB = {
+    // 冷間ダイス鋼・工具鋼
+    skd11: { name:"SKD11 (冷間金型)", C:1.50, Cr:12.0, Mn:0.40, Mo:1.00, Si:0.30, Ni:0.20, V:0.3 },
+    dc53:  { name:"DC53 (高靭性ダイス鋼)", C:1.00, Cr:8.00, Mn:0.40, Mo:2.00, Si:0.90, Ni:0.30, V:0.2 },
+    skh51: { name:"SKH51 (ハイス鋼)", C:0.85, Cr:4.00, Mn:0.30, Mo:5.00, Si:0.30, Ni:0.10, V:1.9 },
+    // 熱間ダイス鋼
+    skd61: { name:"SKD61 (熱間金型)", C:0.40, Cr:5.20, Mn:0.40, Mo:1.30, Si:1.00, Ni:0.30, V:1.0 },
+    // プラスチック金型鋼
+    nak55: { name:"NAK55/80 (プリハードン)", C:0.15, Cr:1.00, Mn:1.50, Mo:0.30, Si:0.30, Ni:3.00, V:0 },
+    // ステンレス鋼
+    sus316l:{ name:"SUS316L (オーステナイト)", C:0.03, Cr:16.0, Mn:2.00, Mo:2.00, Si:1.00, Ni:12.0, V:0 },
+    sus304: { name:"SUS304 (オーステナイト)", C:0.06, Cr:18.0, Mn:1.00, Mo:0, Si:0.50, Ni:8.0, V:0 },
+    sus420j2:{ name:"SUS420J2 (マルテンサイト)", C:0.30, Cr:13.0, Mn:1.00, Mo:0, Si:1.00, Ni:0, V:0 },
+    // 構造用鋼・炭素鋼
+    scm440: { name:"SCM440 (クロモリ)", C:0.40, Cr:1.10, Mn:0.75, Mo:0.20, Si:0.25, Ni:0.20, V:0 },
+    s45c:  { name:"S45C (機械構造用)", C:0.45, Cr:0.20, Mn:0.75, Mo:0.05, Si:0.25, Ni:0.05, V:0 },
+    s50c:  { name:"S50C (炭素鋼鋼材)", C:0.50, Cr:0, Mn:0.75, Mo:0, Si:0.25, Ni:0, V:0 },
+    ss400: { name:"SS400 (一般構造用)", C:0.15, Cr:0, Mn:0.60, Mo:0, Si:0, Ni:0, V:0 }
+};
 
-function calcCeq(c,mn,cr,mo,si,v){
-
-return c + mn/6 + (cr+mo+v)/5 + si/24;
-
-}
-
-function calcMs(c,mn,cr,ni,mo){
-
-return 539 - 423*c - 30.4*mn - 12.1*cr - 17.7*ni - 7.5*mo;
-
-}
-
-function calcPreheat(ceq){
-
-let t=350*(ceq-0.25);
-
-if(t<25) t=25;
-
-return Math.round(t);
-
-}
-
-function coolingRate(heat){
-
-return (800/heat).toFixed(1);
-
-}
-
-function structure(ms){
-
-if(ms>350) return "Martensite";
-if(ms>200) return "Bainite";
-if(ms>100) return "Mixed";
-return "Austenite";
-
-}
-
-function dilution(base,powder){
-
-let d=base/(base+powder);
-
-return (d*100).toFixed(1)+"%";
-
-}
-
-function riskLevel(ceq){
-
-if(ceq>0.8) return "CRITICAL";
-if(ceq>0.45) return "HIGH";
-return "SAFE";
-
-}
+let chartInstance = null;
 
 function calculate(){
+    let c=parseFloat(document.getElementById("C").value)||0, cr=parseFloat(document.getElementById("Cr").value)||0,
+        mn=parseFloat(document.getElementById("Mn").value)||0, mo=parseFloat(document.getElementById("Mo").value)||0,
+        si=parseFloat(document.getElementById("Si").value)||0, ni=parseFloat(document.getElementById("Ni").value)||0,
+        v=parseFloat(document.getElementById("V").value)||0;
 
-let c=parseFloat(C.value)||0;
-let cr=parseFloat(Cr.value)||0;
-let mn=parseFloat(Mn.value)||0;
-let mo=parseFloat(Mo.value)||0;
-let si=parseFloat(Si.value)||0;
-let ni=parseFloat(Ni.value)||0;
+    let ceq, ms, risk, color, isAustenite = (ni >= 7 && cr >= 15);
 
-let heat=parseFloat(heat.value);
-let base=parseFloat(base.value);
-let powder=parseFloat(powder.value);
+    if (isAustenite) {
+        ceq = c + mn/20 + si/50 + cr/40 + mo/50;
+        ms = -150; risk = "SAFE"; color = "#00f2fe";
+    } else {
+        ceq = c + mn/6 + (cr+mo+v)/5 + ni/15;
+        ms = 539 - 423*c - 30.4*mn - 12.1*cr - 17.7*ni - 7.5*mo;
+        if (cr > 10) ms = 540 - 450*c - 15*cr;
+        if (ms < 50) ms = 165 + (c*20);
+        risk = ceq > 0.8 ? "CRITICAL" : (ceq > 0.45 ? "HIGH" : "SAFE");
+        color = ceq > 0.8 ? "#ff4d4d" : (ceq > 0.45 ? "#ffcf00" : "#2ecc71");
+    }
 
-let ceq=calcCeq(c,mn,cr,mo,si,0);
-let ms=calcMs(c,mn,cr,ni,mo);
-let preheat=calcPreheat(ceq);
-let cool=coolingRate(heat);
-let str=structure(ms);
-let dil=dilution(base,powder);
-let risk=riskLevel(ceq);
+    let preheatVal = isAustenite ? 25 : Math.min(350, Math.max(25, Math.round(350 * (ceq - 0.25))));
 
-ceq=ceq.toFixed(2);
-ms=Math.round(ms);
+    document.getElementById("resBox").style.display = "block";
+    document.getElementById("risk").innerText = risk;
+    document.getElementById("risk").style.color = color;
+    document.getElementById("ceq").innerText = ceq.toFixed(2);
+    document.getElementById("ms").innerText = isAustenite ? "常温以下" : Math.round(ms) + " ℃";
+    document.getElementById("preheat").innerText = preheatVal + " ℃";
 
-document.getElementById("risk").innerText=risk;
-document.getElementById("ceq").innerText=ceq;
-document.getElementById("ms").innerText=ms+" ℃";
-document.getElementById("preheat").innerText=preheat+" ℃";
-document.getElementById("cooling").innerText=cool+" ℃/s";
-document.getElementById("structure").innerText=str;
-document.getElementById("dilution").innerText=dil;
-
-drawChart(ceq,ms,preheat,cool);
-
+    const ctx = document.getElementById("chart");
+    if(chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(ctx, {
+        type: "bar",
+        data: { 
+            labels: ["Ceq*100", "Ms(℃)", "Preheat(℃)"], 
+            datasets: [{ 
+                data: [ceq * 100, isAustenite ? 0 : ms, preheatVal], 
+                backgroundColor: [color, "#2ecc71", "#ffcf00"]
+            }] 
+        },
+        options: { 
+            plugins: { legend: { display: false } },
+            maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, max: 600 } }
+        }
+    });
 }
 
-function drawChart(ceq,ms,preheat,cooling){
-
-const ctx=document.getElementById("chart");
-
-new Chart(ctx,{
-
-type:"bar",
-
-data:{
-labels:["Ceq","Ms","Preheat","Cooling"],
-datasets:[{
-data:[ceq,ms,preheat,cooling],
-backgroundColor:["#00f2fe","#2ecc71","#ffcf00","#ff4d4d"]
-}]
-},
-
-options:{
-plugins:{legend:{display:false}}
-}
-
+document.getElementById("material").addEventListener("change", function(){
+    let data = materialDB[this.value];
+    if(data){
+        document.getElementById("C").value=data.C; document.getElementById("Cr").value=data.Cr;
+        document.getElementById("Mn").value=data.Mn; document.getElementById("Mo").value=data.Mo;
+        document.getElementById("Si").value=data.Si; document.getElementById("Ni").value=data.Ni;
+        document.getElementById("V").value=data.V;
+    }
 });
 
+function init() {
+    const sel = document.getElementById("material");
+    for(let key in materialDB) {
+        let opt = document.createElement("option");
+        opt.value = key; opt.innerText = materialDB[key].name;
+        sel.appendChild(opt);
+    }
+    document.getElementById("material").dispatchEvent(new Event("change"));
 }
-
+window.onload = init;
 </script>
-
 </body>
 </html>

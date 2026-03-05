@@ -1,145 +1,282 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEKISOU NAVI PRO v3.7</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #00f2fe; --warning: #ffcf00; --danger: #ff4d4d; --bg: #0a0e17; --card-bg: rgba(20, 30, 48, 0.8); --text: #e0f7fa; --input-bg: rgba(0, 0, 0, 0.3); --border: #1a2a44; }
-        body { font-family: 'Roboto', sans-serif; background: var(--bg); background-image: radial-gradient(#1a2a44 1px, transparent 1px); background-size: 20px 20px; color: var(--text); padding: 20px; display: flex; justify-content: center; margin: 0; min-height: 100vh; }
-        .card { max-width: 500px; width: 100%; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 0 25px rgba(0, 242, 254, 0.2); border: 1px solid var(--border); backdrop-filter: blur(10px); }
-        h1 { font-family: 'Orbitron', sans-serif; color: var(--primary); text-align: center; font-size: 1.6rem; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0, 242, 254, 0.6); margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 10px; width: 100%; }
-        .section-title { font-family: 'Orbitron', sans-serif; font-size: 0.75rem; color: var(--primary); margin: 20px 0 10px; letter-spacing: 2px; display: flex; align-items: center; }
-        .section-title::before { content: ''; width: 8px; height: 8px; background: var(--primary); margin-right: 8px; box-shadow: 0 0 8px var(--primary); }
-        select, input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 6px; color: var(--primary); font-size: 1rem; margin-bottom: 15px; outline: none; box-sizing: border-box; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { font-size: 0.75rem; color: #88a0b0; margin-bottom: 4px; display: block; }
-        button { font-family: 'Orbitron', sans-serif; width: 100%; padding: 18px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; text-transform: uppercase; margin-top: 10px; }
-        .btn-calc { background: linear-gradient(135deg, var(--primary), #00a8b5); color: #0a0e17; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4); }
-        .btn-save { background: transparent; color: #668090; border: 1px solid #334a60; font-size: 0.8rem; margin-top: 10px; }
-        .result-box { margin-top: 25px; padding: 20px; border-radius: 8px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border); display: none; }
-        .gauge-container { height: 10px; background: #1a2a44; border-radius: 5px; margin: 20px 0; overflow: hidden; }
-        .gauge-bar { height: 100%; width: 0%; transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; margin-bottom: 15px; }
-        .stat-val { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: bold; }
-        .stat-label { font-size: 0.65rem; color: #88a0b0; }
-        .advice-card { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 6px; border-left: 3px solid var(--primary); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEKISOU NAVI PRO v5</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+:root{
+--primary:#00f2fe;
+--danger:#ff4d4d;
+--warn:#ffcf00;
+--safe:#2ecc71;
+--bg:#0a0e17;
+--card:rgba(20,30,48,0.9);
+--border:#1a2a44;
+--text:#e0f7fa;
+}
+
+body{
+font-family:Arial;
+background:var(--bg);
+color:var(--text);
+padding:20px;
+display:flex;
+justify-content:center;
+}
+
+.card{
+max-width:520px;
+width:100%;
+background:var(--card);
+padding:25px;
+border-radius:10px;
+border:1px solid var(--border);
+}
+
+h1{
+text-align:center;
+color:var(--primary);
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+background:black;
+border:1px solid var(--border);
+color:var(--primary);
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:10px;
+font-weight:bold;
+background:var(--primary);
+border:none;
+cursor:pointer;
+}
+
+.result{
+margin-top:20px;
+padding:15px;
+border:1px solid var(--border);
+}
+
+.stat{
+font-size:20px;
+font-weight:bold;
+}
+
+canvas{
+margin-top:20px;
+}
+
+/* smartphone */
+
+@media(max-width:600px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
 </head>
+
 <body>
+
 <div class="card">
-    <h1>CRACK ANALYSIS MASTER</h1>
-    <div class="section-title">Material Database</div>
-    <select id="materialSelect" onchange="loadMaterial()"></select>
-    <div id="newNameArea" style="display:none;"><input type="text" id="newName" placeholder="New Material Name"></div>
-    <div class="section-title">Chemical Composition (%)</div>
-    <div class="grid">
-        <div><label>C</label><input type="number" id="C" step="0.01"></div>
-        <div><label>Cr</label><input type="number" id="Cr" step="0.01"></div>
-        <div><label>Mn</label><input type="number" id="Mn" step="0.01"></div>
-        <div><label>Mo</label><input type="number" id="Mo" step="0.01"></div>
-        <div><label>Si</label><input type="number" id="Si" step="0.01"></div>
-        <div><label>Ni</label><input type="number" id="Ni" step="0.01"></div>
-    </div>
-    <div style="margin-top:10px;"><label>V (Vanadium)</label><input type="number" id="V" step="0.01" value="0"></div>
-    <button class="btn-calc" onclick="calculate()">Analyze Crack Risk</button>
-    <button class="btn-save" onclick="saveMaterial()">Save New Material</button>
-    <div id="result" class="result-box">
-        <div style="text-align: center; font-family: 'Orbitron'; font-size:0.9rem;" id="riskLevel">RISK LEVEL</div>
-        <div class="gauge-container"><div id="gauge" class="gauge-bar"></div></div>
-        <div class="stat-grid">
-            <div><div class="stat-label">Ceq (炭素当量)</div><div id="ceqVal" class="stat-val">0.00</div></div>
-            <div><div class="stat-label">Ms Point (変態点)</div><div id="msPoint" class="stat-val">-- ℃</div></div>
-        </div>
-        <div class="advice-card">
-            <div style="font-weight:bold; color:var(--primary); font-size:0.7rem; margin-bottom:5px;">TECHNICAL ADVICE</div>
-            <div id="mainAdvice" style="font-size: 0.9rem; line-height: 1.6;">---</div>
-        </div>
-    </div>
+
+<h1>CRACK ANALYSIS MASTER v5</h1>
+
+<select id="material">
+<option value="skd11">SKD11</option>
+<option value="dc53">DC53</option>
+<option value="skd61">SKD61</option>
+<option value="scm440">SCM440</option>
+<option value="s45c">S45C</option>
+<option value="sus304">SUS304</option>
+</select>
+
+<div class="grid">
+
+<div><label>C</label><input id="C" type="number"></div>
+<div><label>Cr</label><input id="Cr" type="number"></div>
+<div><label>Mn</label><input id="Mn" type="number"></div>
+<div><label>Mo</label><input id="Mo" type="number"></div>
+<div><label>Si</label><input id="Si" type="number"></div>
+<div><label>Ni</label><input id="Ni" type="number"></div>
+
 </div>
+
+<label>Heat Input (kJ/mm)</label>
+<input id="heat" value="5">
+
+<label>Base Metal</label>
+<input id="base" value="80">
+
+<label>Powder</label>
+<input id="powder" value="20">
+
+<button onclick="calculate()">Analyze</button>
+
+<div class="result">
+
+<div>Risk Level</div>
+<div class="stat" id="risk"></div>
+
+<div>Ceq</div>
+<div class="stat" id="ceq"></div>
+
+<div>Ms Point</div>
+<div class="stat" id="ms"></div>
+
+<div>Preheat Temp</div>
+<div class="stat" id="preheat"></div>
+
+<div>Cooling Rate</div>
+<div class="stat" id="cooling"></div>
+
+<div>Structure</div>
+<div class="stat" id="structure"></div>
+
+<div>Dilution</div>
+<div class="stat" id="dilution"></div>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+</div>
+
 <script>
-    const defaultData = {
-        skd11: { name: "SKD11", c: 1.5, cr: 12.0, mn: 0.4, mo: 1.0, si: 0.3, ni: 0, v: 0.3 },
-        dc53: { name: "DC53 (SKD11改良)", c: 0.55, cr: 5.5, mn: 0.35, mo: 1.25, si: 0.35, ni: 0, v: 0.2 },
-        skd61: { name: "SKD61", c: 0.4, cr: 5.0, mn: 0.4, mo: 1.2, si: 1.0, ni: 0, v: 1.0 },
-        skh51: { name: "SKH51 (High-speed)", c: 0.85, cr: 4.0, mn: 0.3, mo: 5.0, si: 0.3, ni: 0, v: 1.9 },
-        nak55: { name: "NAK55 (Pre-hardened)", c: 0.15, cr: 1.0, mn: 1.5, mo: 0.3, si: 0.3, ni: 3.0, v: 0 },
-        sus316l: { name: "SUS316L (Austenite)", c: 0.03, cr: 16.0, mn: 2.0, mo: 2.0, si: 1.0, ni: 12.0, v: 0 },
-        sus304: { name: "SUS304 (Austenite)", c: 0.08, cr: 18.0, mn: 2.0, mo: 0, si: 1.0, ni: 8.0, v: 0 },
-        sus420j2: { name: "SUS420J2 (Martensite)", c: 0.3, cr: 13.0, mn: 0.5, mo: 0, si: 0.5, ni: 0, v: 0 },
-        sus440c: { name: "SUS440C (Martensite)", c: 1.0, cr: 17.0, mn: 0.5, mo: 0.4, si: 0.5, ni: 0, v: 0 },
-        inco718: { name: "Inconel 718 (Ni-base)", c: 0.05, cr: 19.0, mn: 0.35, mo: 3.0, si: 0.35, ni: 52.0, v: 0 },
-        scm440: { name: "SCM440", c: 0.4, cr: 1.0, mn: 0.7, mo: 0.2, si: 0.2, ni: 0, v: 0 },
-        s45c: { name: "S45C", c: 0.45, cr: 0, mn: 0.6, mo: 0, si: 0.2, ni: 0, v: 0 }
-    };
-    let materials = JSON.parse(localStorage.getItem('myMaterials')) || defaultData;
-    function init() {
-        const select = document.getElementById('materialSelect');
-        select.innerHTML = '';
-        for (let key in materials) {
-            let opt = document.createElement('option');
-            opt.value = key;
-            opt.innerText = materials[key].name;
-            select.appendChild(opt);
-        }
-        let optNew = document.createElement('option');
-        optNew.value = 'new';
-        optNew.innerText = '＋ 新規材料を追加';
-        select.appendChild(optNew);
-        loadMaterial();
-    }
-    function loadMaterial() {
-        const sel = document.getElementById('materialSelect').value;
-        if (sel === 'new') {
-            document.getElementById('newNameArea').style.display = 'block';
-            ['C','Cr','Mn','Mo','Si','Ni','V'].forEach(id => document.getElementById(id).value = '');
-        } else {
-            document.getElementById('newNameArea').style.display = 'none';
-            const data = materials[sel];
-            ['C','Cr','Mn','Mo','Si','Ni','V'].forEach(id => document.getElementById(id).value = data[id.toLowerCase()] || 0);
-        }
-    }
-    function calculate() {
-        const c = parseFloat(document.getElementById('C').value) || 0;
-        const cr = parseFloat(document.getElementById('Cr').value) || 0;
-        const mn = parseFloat(document.getElementById('Mn').value) || 0;
-        const mo = parseFloat(document.getElementById('Mo').value) || 0;
-        const si = parseFloat(document.getElementById('Si').value) || 0;
-        const ni = parseFloat(document.getElementById('Ni').value) || 0;
-        const v = parseFloat(document.getElementById('V').value) || 0;
-        let ceq, ms, risk, color, advice, score;
-        if ((ni >= 7 && cr >= 15) || ni > 30) {
-            risk = "STABLE (Austenite/Ni)"; color = "#00f2fe"; score = 10;
-            ceq = c + (mn/20) + (si/50) + (cr/40) + (mo/50); ms = -150;
-            advice = "オーステナイト組織のため硬化割れリスクは低いです。予熱なしで安全に施工可能です。";
-        } else {
-            ceq = c + (mn/6) + (si/24) + (cr/5) + (mo/4) + (v/14);
-            ms = 539 - (423 * c) - (30.4 * mn) - (12.1 * cr) - (17.7 * ni) - (7.5 * mo);
-            if (cr > 10) ms = 540 - (450 * c) - (15 * cr);
-            if (ms < 50) ms = 165 + (c * 20);
-            score = Math.min(ceq * 40, 100);
-            if (ceq > 0.8 || c > 0.4) {
-                risk = "CRITICAL DANGER"; color = "#ff4d4d";
-                advice = `割れリスクが非常に高いです。予熱250℃以上を推奨。変態点(${ms.toFixed(0)}℃)を下回る前に後熱処理が必要です。`;
-            } else if (ceq > 0.45) {
-                risk = "HIGH RISK"; color = "#ffcf00";
-                advice = "硬化割れの恐れがあります。150℃〜200℃の予熱と徐冷を推奨します。";
-            } else {
-                risk = "SAFE"; color = "#2ecc71";
-                advice = "標準的な施工条件で安全に積層可能です。";
-            }
-        }
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('riskLevel').innerText = "RISK: " + risk;
-        document.getElementById('riskLevel').style.color = color;
-        document.getElementById('gauge').style.width = score + "%";
-        document.getElementById('gauge').style.background = color;
-        document.getElementById('ceqVal').innerText = ceq.toFixed(2);
-        document.getElementById('msPoint').innerText = (ms < 0) ? "常温以下" : ms.toFixed(0) + "℃";
-        document.getElementById('mainAdvice').innerText = advice;
-    }
-    init();
+
+function calcCeq(c,mn,cr,mo,si,v){
+
+return c + mn/6 + (cr+mo+v)/5 + si/24;
+
+}
+
+function calcMs(c,mn,cr,ni,mo){
+
+return 539 - 423*c - 30.4*mn - 12.1*cr - 17.7*ni - 7.5*mo;
+
+}
+
+function calcPreheat(ceq){
+
+let t=350*(ceq-0.25);
+
+if(t<25) t=25;
+
+return Math.round(t);
+
+}
+
+function coolingRate(heat){
+
+return (800/heat).toFixed(1);
+
+}
+
+function structure(ms){
+
+if(ms>350) return "Martensite";
+if(ms>200) return "Bainite";
+if(ms>100) return "Mixed";
+return "Austenite";
+
+}
+
+function dilution(base,powder){
+
+let d=base/(base+powder);
+
+return (d*100).toFixed(1)+"%";
+
+}
+
+function riskLevel(ceq){
+
+if(ceq>0.8) return "CRITICAL";
+if(ceq>0.45) return "HIGH";
+return "SAFE";
+
+}
+
+function calculate(){
+
+let c=parseFloat(C.value)||0;
+let cr=parseFloat(Cr.value)||0;
+let mn=parseFloat(Mn.value)||0;
+let mo=parseFloat(Mo.value)||0;
+let si=parseFloat(Si.value)||0;
+let ni=parseFloat(Ni.value)||0;
+
+let heat=parseFloat(heat.value);
+let base=parseFloat(base.value);
+let powder=parseFloat(powder.value);
+
+let ceq=calcCeq(c,mn,cr,mo,si,0);
+let ms=calcMs(c,mn,cr,ni,mo);
+let preheat=calcPreheat(ceq);
+let cool=coolingRate(heat);
+let str=structure(ms);
+let dil=dilution(base,powder);
+let risk=riskLevel(ceq);
+
+ceq=ceq.toFixed(2);
+ms=Math.round(ms);
+
+document.getElementById("risk").innerText=risk;
+document.getElementById("ceq").innerText=ceq;
+document.getElementById("ms").innerText=ms+" ℃";
+document.getElementById("preheat").innerText=preheat+" ℃";
+document.getElementById("cooling").innerText=cool+" ℃/s";
+document.getElementById("structure").innerText=str;
+document.getElementById("dilution").innerText=dil;
+
+drawChart(ceq,ms,preheat,cool);
+
+}
+
+function drawChart(ceq,ms,preheat,cooling){
+
+const ctx=document.getElementById("chart");
+
+new Chart(ctx,{
+
+type:"bar",
+
+data:{
+labels:["Ceq","Ms","Preheat","Cooling"],
+datasets:[{
+data:[ceq,ms,preheat,cooling],
+backgroundColor:["#00f2fe","#2ecc71","#ffcf00","#ff4d4d"]
+}]
+},
+
+options:{
+plugins:{legend:{display:false}}
+}
+
+});
+
+}
+
 </script>
+
 </body>
 </html>
